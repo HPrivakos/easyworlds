@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+  worlds-content-server:
+    image: quay.io/decentraland/worlds-content-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - "./contents:/app/contents"
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=worlds
+    ports:
+      - 5432
+    volumes:
+      - "./db:/var/lib/postgresql/data"
